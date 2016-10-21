@@ -127,6 +127,7 @@
 			function startPrint(){
 				if (document.getElementById("printables").selectedIndex <0){
 					//do nothing
+					$('#warning').html("<strong>Error</strong><br>Please select an item to print!");
 					$('#warning').show();
 					setTimeout(function() {
 						$('#warning').hide();
@@ -135,7 +136,14 @@
 				else{
 					$.post("../services/printables/print/"+$("#printables").val())
 					.done(function(){
-					window.location.href="printdialogue.html";
+						window.location.href="printdialogue.html";
+					})
+					.fail(function(){
+						$('#warning').html("<strong>Error</strong><br>Could not print item "+$("#printables").val());
+						$('#warning').show();
+						setTimeout(function() {
+						$('#warning').hide();
+					}, 5000);
 				});
 				}
 			}
@@ -189,6 +197,13 @@
 						var options = $("#printables option");                    // Collect options         
 						options.detach();
 						fillList();
+				})
+				.fail(function(){
+					$('#warning').html("<strong>Error</strong><br>Could not delete item "+$("#printables").val());
+					$('#warning').show();
+					setTimeout(function() {
+					$('#warning').hide();
+					}, 5000);
 				});
 			}
 			function showcontrol(){
@@ -213,7 +228,7 @@
 				<div name="printbutton" class="printbutton" id="printbutton" onClick="startPrint();">Print!</div>
 				<select size="6" class="printables" id="printables" onClick="showcontrol();" onChange="showcontrol();">
 				</select>
-				<div name="printwarn" id="warn" class="warn"><div id="warning" role="alert" class="alert alert-danger collapse" ><strong>Error</strong><br>Please select an item to print!</div></div>
+				<div name="printwarn" id="warn" class="warn"><div id="warning" role="alert" class="alert alert-danger collapse" ></div></div>
 				<div name="deletecheck" id="deletecheck" class="deletecheck">
 					<div id="deletewarn" role="alert" class="alert alert-warning collapse" >
 						<div id="deletequery"></div>
