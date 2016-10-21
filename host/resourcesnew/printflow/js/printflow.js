@@ -1,5 +1,6 @@
 var printStatus = "";
 var jobId="";
+var runningjobName="";
             
 function startpage(){
         //handles page setup and the common things across all pages:
@@ -46,6 +47,7 @@ function printredirect(){
 				console.log(data);
 				printStatus= (data.status);
                                 jobId = (data.id);
+                                runningjobName = (data.jobName);
 			}
 			else{
 				//not printing
@@ -56,7 +58,7 @@ function printredirect(){
                         //use cookies to check that this error has not been reported already for the unique job id. Otherwise you'll be stuck in a constant loop of being forced back to the error screen.
                         if ((typeof Cookies.get('lastfailedjob') === 'undefined')||(Cookies.get('lastfailedjob')!=jobId)){
                                 Cookies.set('lastfailedjob',jobId);
-                                window.location.href=("error.html?errorname=Print Failed&errordetails=The print [Job ID: "+jobId+"] has unexpectedly failed.\nPlease retry the print, and if the issue persists, contact Technical Support via <b>www.photocentric3d.com</b>");
+                                window.location.href=("error.html?errorname=Print Failed&errordetails=The print of "+runningjobName+" [Job ID: "+jobId+"] has unexpectedly failed.\nPlease retry the print, and if the issue persists, contact Technical Support via <b>www.photocentric3d.com</b>");
                         }
 		}
 		if (printStatus=="Printing"){
