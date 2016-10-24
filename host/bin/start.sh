@@ -138,11 +138,22 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	DL_FILE=${DL_URL##*/}
 	rm -f "/tmp/${DL_FILE}"
 	wget -P /tmp "${DL_URL}"
-  if [ $? -ne 0 ]; then
+	if [ $? -ne 0 ]; then
 		echo "wget of ${DL_FILE} failed. Aborting update."
 		exit 1
 	fi
 
+	if [ -e "/opt/cwh/photocentric/printflow/js/printerconfig.js" ]; then 
+		#ensure preservation of printerconfig.js as it tracks which printer the pi is embedded in.
+		cp -f /opt/cwh/photocentric/printflow/js/printerconfig.js /tmp/$DL_FILE/photocentric/printflow/js/printerconfig.js
+	elif [ -e "/etc/photocentric/printerconfig.ini" ]; then 
+		#todo: read from printerconfig.ini
+		source /etc/photocentric/printerconfig.ini
+		echo var printerName = \"$printername\"\; > /tmp/$DL_FILE/photocentric/printflow/js/printerconfig.js
+	else
+		echo "unable to determine printer type"
+	fi
+	
 	rm -r ${installDirectory}
 	mkdir -p ${installDirectory}
 	cd ${installDirectory}
