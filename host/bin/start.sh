@@ -42,7 +42,8 @@ else
 	installDirectory=/opt/cwh
 fi;
 
-
+# disable wlan0 because we don't want to use it
+ifconfig wlan0 down
 
 #Its pretty hard to keep these updated, let me know when they get too old
 if [ "${cpu}" = "armv6l" -o "${cpu}" = "armv7l" ]; then
