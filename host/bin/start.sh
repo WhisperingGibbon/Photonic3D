@@ -167,7 +167,7 @@ elif [ "${NETWORK_TAG}" != "${LOCAL_TAG}" -o "$2" == "force" ]; then
 	# ensure the cwhservice always is linux format and executable
 	grep -lU $'\x0D' /etc/init.d/cwhservice | xargs dos2unix
 	chmod +x /etc/init.d/cwhservice
-	chmod +x /opt/cwh/os/Linux/armv61 pdp
+	chmod +x /opt/cwh/os/Linux/armv61/pdp
 	rm ${DL_FILE}
 else
 	echo No install required
