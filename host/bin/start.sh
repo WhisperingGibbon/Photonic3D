@@ -201,6 +201,9 @@ if [ -e "/opt/cwh/resourcesnew/printflow/js/printerconfig.js" ]; then
 	./.focus.sh &
 fi
 
+# kill any lingering pdp sessions
+pkill -9 "pdp"
+
 if [ "$2" == "debug" ]; then
 	pkill -9 -f "org.area515.resinprinter.server.Main"
 	echo "Starting printer host server($2)"
