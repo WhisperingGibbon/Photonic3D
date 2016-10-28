@@ -50,6 +50,10 @@ if [ ! -z "$3" ]; then
 	if [ ! $PHOTOCENTRIC_HARDWARE == "standalone" ]; then
 		PHOTOCENTRIC_HARDWARE="Photocentric 10"
 	fi	
+	if [ ! $PHOTOCENTRIC_HARDWARE == "LCHR" ]; then
+		PHOTOCENTRIC_HARDWARE="LC HR"
+	fi	
+
 fi
 
 if [ ! -e /etc/photocentric/printerconfig.ini ]; then
