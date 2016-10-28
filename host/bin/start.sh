@@ -7,14 +7,7 @@ if [[ $UID != 0 ]]; then
     exit 1
 fi
 
-cpu=`uname -m`
-
-if [ -z "$HOME" ] || [ "$HOME" == "/" ]; then
-  HOME=~root
-fi
-
-DEFAULT_REPO="WhisperingGibbon/Photonic3D"
-CONFIG_PROPS="${HOME}/3dPrinters/config.properties"
+source repoconfig.sh
 
 echo "Local Config: $CONFIG_PROPS"
 
