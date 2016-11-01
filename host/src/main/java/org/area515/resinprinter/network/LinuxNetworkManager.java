@@ -17,12 +17,12 @@ public class LinuxNetworkManager implements NetworkManager {
 	public String getCurrentSSID(){
 		if (this.currentSSID == null){
 			//need to populate. Can use iwgetid -r to get a basic SSID
-			List<String[]> output = IOUtilities.executeNativeCommand(new String[]{"iwgetid", "-r"}, null, null);
-			for (String[] lines : output) {
-				if (lines == null) {
+			String[] output = IOUtilities.executeNativeCommand(new String[]{"iwgetid", "-r"}, null, null);
+			for (String[] output) {
+				if (output == null) {
 					continue;
 				}
-				currentSSID = lines[0];
+				currentSSID = output[0];
 			}
 		}
 		return currentSSID;
