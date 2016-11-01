@@ -18,12 +18,7 @@ public class LinuxNetworkManager implements NetworkManager {
 		if (this.currentSSID == null){
 			//need to populate. Can use iwgetid -r to get a basic SSID
 			String[] output = IOUtilities.executeNativeCommand(new String[]{"iwgetid", "-r"}, null, null);
-			for (String[] output) {
-				if (output == null) {
-					continue;
-				}
-				currentSSID = output[0];
-			}
+			currentSSID = output[0];
 		}
 		return currentSSID;
 	}
