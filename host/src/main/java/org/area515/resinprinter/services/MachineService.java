@@ -427,7 +427,7 @@ public class MachineService {
 
 // Early modifications to support WiFi signal strength. Feel free to discard as necessary.
 //
-//    @ApiOperation(value = "Enumerates the signal strength for the currently connected wireless host. Returns from -1 (not connected), 0 to 3 (full strength).")
+//    @ApiOperation(value = "Enumerates the signal strength in dBm for the currently connected wireless host.")
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 200, message = SwaggerMetadata.SUCCESS),
 //            @ApiResponse(code = 500, message = SwaggerMetadata.UNEXPECTED_ERROR)})
