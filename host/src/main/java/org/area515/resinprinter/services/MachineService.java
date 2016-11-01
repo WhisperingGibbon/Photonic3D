@@ -424,6 +424,35 @@ public class MachineService {
 			logger.error("Error connecting to WifiSSID:" + network.getSsid(), e);
 		}
 	 }
+
+// Early modifications to support WiFi signal strength. Feel free to discard as necessary.
+//
+//    @ApiOperation(value = "Enumerates the signal strength for the currently connected wireless host. Returns from -1 (not connected), 0 to 3 (full strength).")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = SwaggerMetadata.SUCCESS),
+//            @ApiResponse(code = 500, message = SwaggerMetadata.UNEXPECTED_ERROR)})
+//	 @GET
+//	 @Path("wirelessNetworks/getSignalStrength")
+//	 @Produces(MediaType.APPLICATION_JSON)
+//	 public List<WirelessNetwork> getWirelessNetworks() {
+//		Class<NetworkManager> managerClass = HostProperties.Instance().getNetworkManagerClass();
+//		try {
+//			NetworkManager networkManager = managerClass.newInstance();
+//			List<NetInterface> interfaces = networkManager.getNetworkInterfaces();
+//			List<WirelessNetwork> wInterfaces = new ArrayList<WirelessNetwork>();
+//			
+//			for (NetInterface network : interfaces) {
+//				for (WirelessNetwork wnetwork : network.getWirelessNetworks()) {
+//					wInterfaces.add(wnetwork);
+//				}
+//			}
+//			
+//			return wInterfaces;
+//		} catch (InstantiationException | IllegalAccessException e) {
+//			logger.error("Error retrieving wireless networks", e);
+//			return null;
+//		}
+//	 }
 	
     @ApiOperation(value = "Enumerates the list of serial ports available on the Photonic 3D host.")
     @ApiResponses(value = {
