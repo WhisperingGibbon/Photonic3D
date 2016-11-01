@@ -431,9 +431,9 @@ public class MachineService {
             @ApiResponse(code = 200, message = SwaggerMetadata.SUCCESS),
             @ApiResponse(code = 500, message = SwaggerMetadata.UNEXPECTED_ERROR)})
 	 @GET
-	 @Path("wirelessNetworks/getSignalStrength")
+	 @Path("wirelessNetworks/getWirelessStrength")
 	 @Produces(MediaType.APPLICATION_JSON)
-	 public List<WirelessNetwork> getWirelessNetworks() {
+	 public String getWirelessStrength() {
 		Class<NetworkManager> managerClass = HostProperties.Instance().getNetworkManagerClass();
 		try {
 			NetworkManager networkManager = managerClass.newInstance();
