@@ -33,6 +33,7 @@ public class LinuxNetworkManager implements NetworkManager {
 			netFace.getWirelessNetworks().add(currentWireless);
 			currentWireless.setSsid(lines[4]);
 			currentWireless.setParentInterfaceName(netFace.getName());
+			currentWireless.setSignalStrength(lines[2]);
 			Matcher matcher = networkEncryptionClass.matcher(lines[3]);
 			while (matcher.find()) {
 				StringTokenizer tokenizer = new StringTokenizer(matcher.group(1), "+-");
