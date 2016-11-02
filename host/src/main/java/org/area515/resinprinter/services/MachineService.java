@@ -443,7 +443,7 @@ public class MachineService {
 
 			for (NetInterface network : interfaces) {
 				for (WirelessNetwork wnetwork : network.getWirelessNetworks()) {
-					if (wnetwork.getSsid().compareToIgnoreCase(currentSSID)){
+					if (wnetwork.getSsid().compareToIgnoreCase(currentSSID)==0){
 						signal = wnetwork.getSignalStrength();
 					}
 				}
