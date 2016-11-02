@@ -17,12 +17,27 @@ public class LinuxNetworkManager implements NetworkManager {
 	public String getCurrentSSID(){
 		if (this.currentSSID == null){
 			//need to populate. Can use iwgetid -r to get a basic SSID
-			String[] output = IOUtilities.executeNativeCommand(new String[]{"iwgetid", "-r"}, null, null);
+			String[] output = IOUtilities.executeNativeCommand(new String[]{"iwgetid", "-r"}, null, (String) null);
 			currentSSID = output[0];
 		}
 		return currentSSID;
 	}
 	
+	public String getWirelessMAC(){
+		//need to populate. Can use iwgetid -r to get a basic SSID
+		String[] output = IOUtilities.executeNativeCommand(new String[]{"bash", "-c", "\"ifconfig | grep wlan | awk '/HWaddr/{print substr(\\$5,1)}'\""}, null, (String) null);
+		String MAC = output[0];
+		
+		return MAC;
+	}
+
+	public String getWirelessIP(){
+		String[] output = IOUtilities.executeNativeCommand(new String[]{"bash", "-c", "\"ifconfig | grep -A1 wlan | awk '/inet addr/{print substr(\\$2,6)}'\""}, null, (String) null);
+		String IP = output[0];
+		
+		return IP;
+
+	}
 	
 	private void buildWirelessInfo(String nicName, NetInterface netFace) {
 		Pattern networkEncryptionClass = Pattern.compile("\\[([\\+\\-\\w]+)\\]");
