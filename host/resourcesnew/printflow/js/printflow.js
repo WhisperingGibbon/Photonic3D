@@ -16,23 +16,41 @@ function startpage(){
 }
 
 function wifiupdate(){
-	wifiurl="";
 	//TODO: JSON to query the server's wifi status and display it
-	//in the meantime for testing purposes, choose a random number.
-	wifi = Math.floor(Math.random() * 5)-1;
-		
-	switch (wifi){
-		case 0: wifiurl="images/wifi-0.png";
-			break;
-		case 1: wifiurl="images/wifi-1.png";
-			break;
-		case 2: wifiurl="images/wifi-2.png";
-			break;
-		case 3: wifiurl="images/wifi-3.png";
-			break;
-		case -1: wifiurl="images/wifi-nc.png";
-			break;
-	}
+        
+        $.getJSON("../services/machine/wirelessNetworks/getWirelessStrength")
+        .done(function (data){
+		if ((typeof data !== 'undefined')&&(data !== null)){
+			console.log(data);
+			signalstrength = parseInt(data);
+		}
+		else{
+			signalstrength = -100;
+		}
+		})
+        .fail(function(){
+                // there's been a problem - give signal strength the lowest value
+                signalstrength = -100;
+        });
+        
+	// in the meantime for testing purposes, choose a random number.
+	// signalstrength = Math.floor(Math.random() * -60)-30; //signal strength in dBm
+        
+        //using this as a guide for decent signal strengths in dBm: https://support.metageek.com/hc/en-us/articles/201955754-Understanding-WiFi-Signal-Strength
+        if (signalstrength > -45) {
+		wifiurl="images/wifi-3.png";
+        }
+        else if (signalstrength > -67) {
+                wifiurl="images/wifi-2.png";
+        }
+        else if (signalstrength > -72) {
+                wifiurl="images/wifi-1.png";
+        }
+        else if (signalstrength > -80) {
+                wifiurl="images/wifi-0.png";
+        }
+        else wifiurl="images/wifi-nc.png";
+
 	document.getElementById("wifi").src = wifiurl;
 }
             
