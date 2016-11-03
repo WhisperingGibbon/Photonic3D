@@ -23,8 +23,8 @@ changes=0
 sleeptime=$defaultsleeptime
 while true; do
 	process=$(ps -A | grep java |awk '{$2=$2};1'|cut -d " " -f1)
-	mem=expr $(cat /proc/$process/status|grep VmSize|sed "s/VmSize.[[:space:]]*//g"|sed "s/ kB//g") / 1024
-	max=expr $(cat /proc/$process/status|grep VmPeak|sed "s/VmPeak.[[:space:]]*//g"|sed "s/ kB//g") / 1024
+	mem=$(expr $(cat /proc/$process/status|grep VmSize|sed "s/VmSize.[[:space:]]*//g"|sed "s/ kB//g") / 1024)
+	max=$(expr $(cat /proc/$process/status|grep VmPeak|sed "s/VmPeak.[[:space:]]*//g"|sed "s/ kB//g") / 1024)
 	free=$(free -m | grep Mem: | tr -s " " | cut -d " " -f4)
 	
 	timestamp=$(date "+%d/%m/%y %H:%M:%S")
