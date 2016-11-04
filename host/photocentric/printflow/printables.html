@@ -138,13 +138,16 @@
 					.done(function(){
 						window.location.href="printdialogue.html";
 					})
-					.fail(function(){
-						$('#warning').html("<strong>Error</strong><br>Could not print item "+$("#printables").val());
-						$('#warning').show();
-						setTimeout(function() {
-						$('#warning').hide();
-					}, 5000);
-				});
+					.fail(function(response){
+						console.log(response);
+						if (response !== undefined){
+							$('#warning').html("<strong>Error</strong><br>Could not print item "+$("#printables").val());
+							$('#warning').show();
+							setTimeout(function() {
+							$('#warning').hide();
+							}, 5000);
+						}
+					});
 				}
 			}
 			function fillList(){
