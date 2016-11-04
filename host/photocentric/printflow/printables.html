@@ -134,7 +134,7 @@
 					}, 5000);
 				}
 				else{
-					$.post("../services/printables/print/"+$("#printables").val())
+					$.getJSON("../services/printers/startJob/"+$("#printables").val()+"/"+printerName)
 					.done(function(){
 						window.location.href="printdialogue.html";
 					})
