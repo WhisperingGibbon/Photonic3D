@@ -1,6 +1,11 @@
 var printStatus = "";
 var jobId="";
 var runningjobName="";
+var totalslices=0;
+var currentslice=0;
+var elapsedtime=0;
+var averageslicetime=0;
+var signalstrength;
             
 function startpage(){
         //handles page setup and the common things across all pages:
@@ -17,6 +22,7 @@ function startpage(){
 
 function wifiupdate(){
 	//TODO: JSON to query the server's wifi status and display it
+        
         
         $.getJSON("../services/machine/wirelessNetworks/getWirelessStrength")
         .done(function (data){
@@ -66,11 +72,29 @@ function printredirect(){
 				printStatus= (data.status);
                                 jobId = (data.id);
                                 runningjobName = (data.jobName);
+                                totalslices = (data.totalSlices);
+                                currentslice = (data.currentSlice);
+                                elapsedtime = (data.elapsedTime);
+                                averageslicetime = (data.averageSliceTime);
 			}
 			else{
 				//not printing
+                                totalslices = 0;
+                                currentslice = 0;
+                                runningjobName = "";
+                                jobID = "";
+                                elapsedtime = 0;
+                                averageslicetime = 0;
 			}
-		});
+		})
+                .fail(function(){
+                        totalslices = 0;
+                        currentslice = 0;
+                        runningjobName = "";
+                        jobID = "";
+                        elapsedtime = 0;
+                        averageslicetime = 0;
+                });
              
 		if (printStatus=="Failed"){
                         //use cookies to check that this error has not been reported already for the unique job id. Otherwise you'll be stuck in a constant loop of being forced back to the error screen.

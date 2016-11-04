@@ -182,14 +182,8 @@
     </head>
     <body style="background-color: black;" onload="init();">
 		<script>
-			starttime=moment().valueOf();
 			endtime=0;
-			totalslices=0;
-			printid="";
-			jobname="";
-			ready=false;
 			temp="";
-			currentslice =0;
 			initialsliceurl="";
 			
 			function init(){
@@ -199,6 +193,10 @@
 					starttime=parseInt(data.startTime);
 					currentslice=parseInt(data.currentSlice);
 					totalslices=parseInt(data.totalSlices);
+                    jobId = (data.id);
+                    runningjobName = (data.jobName);
+                    totalslices = (data.totalSlices);
+					currentslice = (data.currentSlice);
 					firstlayertime=parseInt(data.printer.configuration.slicingProfile.InkConfig[data.printer.configuration.slicingProfile.selectedInkConfigIndex].FirstLayerTime);
 					bottomlayers=parseInt(data.printer.configuration.slicingProfile.InkConfig[data.printer.configuration.slicingProfile.selectedInkConfigIndex].NumberofBottomLayers);
 					layertime=parseInt(data.printer.configuration.slicingProfile.InkConfig[data.printer.configuration.slicingProfile.selectedInkConfigIndex].LayerTime);
@@ -210,65 +208,57 @@
 						endtime=starttime+(firstlayertime*bottomlayers)+(layertime*(totalslices-bottomlayers));
 					}
 					
-					printid=data.id;
-					jobname=data.jobName;
-					document.getElementById("layerslice").src=initialsliceurl="../services/printJobs/currentSliceImage/"+printid;
-					document.getElementById("jobid").innerHTML=printid;
-					document.getElementById("filename").innerHTML=jobname;
+					
+					document.getElementById("layerslice").src=initialsliceurl="../services/printJobs/currentSliceImage/"+jobId;
+					document.getElementById("jobid").innerHTML=jobId;
+					document.getElementById("filename").innerHTML=runningjobName;
 				})
 				.fail(function(){
 					printid="FAKEe43a-f84f-446c-ade8-70182988d92c";
 					jobname="Dummy Test";
 					totalslices=720;
-					averageslice=1000;
-					endtime=starttime+(totalslices*averageslice);
+					averageslicetime=1000;
+					endtime=starttime+(totalslices*averageslicetime);
 					document.getElementById("layerslice").src="http://www.kudo3d.com/wp-content/uploads/2015/07/Pranav_Pancha_model-of-the-Eiffel-Tower.gif";
-					document.getElementById("jobid").innerHTML=printid;
-					document.getElementById("filename").innerHTML=jobname;
+					document.getElementById("jobid").innerHTML=jobId;
+					document.getElementById("filename").innerHTML=runningjobName;
 					document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
-					ready=true;
 				});
 				startpage();
+				document.getElementById("filename").innerHTML=runningjobName;
+				document.getElementById("jobid").innerHTML=jobId;
+				
+				setInterval(function() {
+					if (currentslice > 1) {
+						if (endtime-moment().valueOf()>=0){
+							document.getElementById("vartimeelapsed").innerHTML = moment.duration(moment().valueOf()-starttime).humanize();
+							document.getElementById("vartimeremaining").innerHTML = moment.duration(endtime-moment().valueOf()).humanize();
+						}
+						else{
+							document.getElementById("vartimeelapsed").innerHTML = moment.duration(endtime-starttime).humanize();
+							document.getElementById("vartimeremaining").innerHTML = "COMPLETE";
+						}
+					}
+					if (document.getElementById("pause").innerHTML=="Resume"){
+						endtime+=1000;
+						starttime+=1000;
+					}
+	
+					endtime=starttime+elapsedtime+(averageslicetime*(totalslices-currentslice));
+					initialsliceurl="../services/printJobs/currentSliceImage/"+jobId;
+					
+					document.getElementById("layerslice").src=initialsliceurl+"?q="+currentslice;
+					document.getElementById("progress").style = "width:"+parseInt((currentslice/totalslices)*100)+"%";
+					if ((parseFloat((currentslice/totalslices)*100).toFixed(2) != "NaN")&&(parseFloat((currentslice/totalslices)*100).toFixed(2) != "Infinity")){
+						document.getElementById("varcompletion").innerHTML = "Layer "+currentslice+" of "+totalslices+" ("+parseFloat((currentslice/totalslices)*100).toFixed(2)+"%)";
+					}
+					document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
+				}, 5000);
 			}
 			
 			
 			
-			setInterval(function() {
-				if (currentslice >1) ready=true;
-				if (document.getElementById("pause").innerHTML=="Resume"){
-					endtime+=1000;
-					starttime+=1000;
-				}
-				if (moment().second()%10===0){
-					//check for updated information about the print
-					$.getJSON('../services/printJobs/getByPrinterName/'+printerName)
-					.done(function(data){
-						printid=data.id;
-					    initialsliceurl="../services/printJobs/currentSliceImage/"+printid;
-						totalslices=parseInt(data.totalSlices);
-						currentslice = parseInt(data.currentSlice);
-						endtime=starttime+data.elapsedTime+(parseInt(data.averageSliceTime)*(parseInt(data.totalSlices)-parseInt(data.currentSlice)));
-					});
-					
-				}
-				document.getElementById("layerslice").src=initialsliceurl+"?q="+currentslice;
-				progresspc = ((moment().valueOf()-starttime)/(endtime-starttime))*100;
-				document.getElementById("progress").style = "width:"+parseInt(progresspc)+"%";
-				if ((parseFloat((currentslice/totalslices)*100).toFixed(2) != "NaN")&&(parseFloat((currentslice/totalslices)*100).toFixed(2) != "Infinity")){
-					document.getElementById("varcompletion").innerHTML = "Layer "+currentslice+" of "+totalslices+" ("+parseFloat((currentslice/totalslices)*100).toFixed(2)+"%)";
-				}
-				document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
-				if (ready){
-					if (endtime-moment().valueOf()>=0){
-						document.getElementById("vartimeelapsed").innerHTML = moment.duration(moment().valueOf()-starttime).humanize();
-						document.getElementById("vartimeremaining").innerHTML = moment.duration(endtime-moment().valueOf()).humanize();
-					}
-					else{
-						document.getElementById("vartimeelapsed").innerHTML = moment.duration(endtime-starttime).humanize();
-						document.getElementById("vartimeremaining").innerHTML = "COMPLETE";
-					}
-				}
-			}, 5000);
+
 			
 			function pause(){
 				$.getJSON("../services/printJobs/togglePause/"+printid);
@@ -307,7 +297,7 @@
 				<div name="pause" class="pause" id="pause" onClick="pause();">Pause</div>
 				
 				<div name="info" id="info" class="info">
-					<div name="filename" id="filename" class="filename"><script>document.write(jobname);</script></div>
+					<div name="filename" id="filename" class="filename"><script>document.write(runningJobName);</script></div>
 					<div name="completion" id="completion" class="completion">Completion:<br><span id ="varcompletion" style="align-items: flex-end">Calculating...</span></div>
 					<div name="timeelapsed" id="timeelapsed" class="timeelapsed">Time Elapsed:<br><span id ="vartimeelapsed" style="align-items: flex-end">Calculating...</span></div>
 					<div name="timeremaining" id="timeremaining" class="timeremaining">Time Remaining:<br><span id ="vartimeremaining" style="align-items: flex-end">Calculating...</span></div>
