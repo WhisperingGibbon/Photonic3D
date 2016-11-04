@@ -208,13 +208,12 @@
 						endtime=starttime+(firstlayertime*bottomlayers)+(layertime*(totalslices-bottomlayers));
 					}
 					
-					
 					document.getElementById("layerslice").src=initialsliceurl="../services/printJobs/currentSliceImage/"+jobId;
 					document.getElementById("jobid").innerHTML=jobId;
 					document.getElementById("filename").innerHTML=runningjobName;
 				})
 				.fail(function(){
-					printid="FAKEe43a-f84f-446c-ade8-70182988d92c";
+					jobId="FAKEe43a-f84f-446c-ade8-70182988d92c";
 					jobname="Dummy Test";
 					totalslices=720;
 					averageslicetime=1000;
@@ -261,7 +260,7 @@
 
 			
 			function pause(){
-				$.getJSON("../services/printJobs/togglePause/"+printid);
+				$.getJSON("../services/printJobs/togglePause/"+jobId);
 				if (document.getElementById("pause").innerHTML=="Pause"){
 					document.getElementById("pause").innerHTML="Resume";
 					document.getElementById("pauseglyph").innerHTML='<span class="glyphicon glyphicon-pause"></span>';
@@ -276,7 +275,7 @@
 			}
 			
 			function cancel(){
-				$.getJSON("../services/printJobs/stopJob/"+printid)
+				$.getJSON("../services/printJobs/stopJob/"+jobId)
 				.always(function(){
 				location.href="index.html";
 				});
