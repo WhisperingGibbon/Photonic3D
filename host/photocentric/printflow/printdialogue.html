@@ -76,18 +76,27 @@
 			-webkit-user-select: none;
 			-ms-user-select: none;
 		}
-		.filename { 
-			position: absolute; 
-			top: 120px; 
-			left: 600px; 
-			color: white;
+		
+		.filename {
 			font-weight: bolder;
 			font-size: 15px;
-			max-width: 140px;
-			white-space: pre-wrap;      /* CSS3 */   
-			white-space: -moz-pre-wrap; /* Firefox */   
-			white-space: -o-pre-wrap;   /* Opera 7 */    
-			word-wrap: break-word;      /* IE */
+			padding-bottom: 5px;
+		}
+		.completion {
+			font-size: 13px;
+			padding-bottom: 4px;
+		}
+		.timeelapsed {
+			font-size: 13px;
+			padding-bottom: 4px;
+		}
+		.timeremaining {
+			font-size: 13px;
+			padding-bottom: 4px;
+		}
+		.totaltime {
+			font-size: 13px;
+			padding-bottom: 4px;
 		}
 		
 		.windowframe{
@@ -103,30 +112,6 @@
 			-ms-user-select: none;
 		}
 
-		.completion { 
-			position: absolute; 
-			top: 185px; 
-			left: 600px; 
-			color: white;
-		}
-		.timeelapsed { 
-			position: absolute; 
-			top: 230px; 
-			left: 600px; 
-			color: white;
-		}
-		.timeremaining { 
-			position: absolute; 
-			top: 275px; 
-			left: 600px; 
-			color: white;
-		}
-		.totaltime { 
-			position: absolute; 
-			top: 320px; 
-			left: 600px; 
-			color: white;
-		}
 		.jobid { 
 			position: absolute; 
 			top: 465px; 
@@ -230,8 +215,6 @@
 					document.getElementById("layerslice").src=initialsliceurl="../services/printJobs/currentSliceImage/"+printid;
 					document.getElementById("jobid").innerHTML=printid;
 					document.getElementById("filename").innerHTML=jobname;
-					document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
-					ready=true;
 				})
 				.fail(function(){
 					printid="FAKEe43a-f84f-446c-ade8-70182988d92c";
@@ -250,7 +233,8 @@
 			
 			
 			
-			setInterval(function() {				
+			setInterval(function() {
+				if (currentslice >1) ready=true;
 				if (document.getElementById("pause").innerHTML=="Resume"){
 					endtime+=1000;
 					starttime+=1000;
@@ -259,6 +243,9 @@
 					//check for updated information about the print
 					$.getJSON('../services/printJobs/getByPrinterName/'+printerName)
 					.done(function(data){
+						printid=data.id;
+					    initialsliceurl="../services/printJobs/currentSliceImage/"+printid;
+						totalslices=parseInt(data.totalSlices);
 						currentslice = parseInt(data.currentSlice);
 						endtime=starttime+data.elapsedTime+(parseInt(data.averageSliceTime)*(parseInt(data.totalSlices)-parseInt(data.currentSlice)));
 					});
@@ -267,7 +254,7 @@
 				document.getElementById("layerslice").src=initialsliceurl+"?q="+currentslice;
 				progresspc = ((moment().valueOf()-starttime)/(endtime-starttime))*100;
 				document.getElementById("progress").style = "width:"+parseInt(progresspc)+"%";
-				if (parseFloat((currentslice/totalslices)*100).toFixed(2) != "NaN"){
+				if ((parseFloat((currentslice/totalslices)*100).toFixed(2) != "NaN")&&(parseFloat((currentslice/totalslices)*100).toFixed(2) != "Infinity")){
 					document.getElementById("varcompletion").innerHTML = "Layer "+currentslice+" of "+totalslices+" ("+parseFloat((currentslice/totalslices)*100).toFixed(2)+"%)";
 				}
 				document.getElementById("totaltimes").innerHTML=moment.duration(endtime-starttime).humanize();
@@ -281,7 +268,7 @@
 						document.getElementById("vartimeremaining").innerHTML = "COMPLETE";
 					}
 				}
-			}, 1000);
+			}, 5000);
 			
 			function pause(){
 				$.getJSON("../services/printJobs/togglePause/"+printid);
@@ -300,13 +287,10 @@
 			
 			function cancel(){
 				$.getJSON("../services/printJobs/stopJob/"+printid)
-				.done(function(){
+				.always(function(){
 				location.href="index.html";
 				});
 			}
-			
-			
-			
 			
 		</script>
         <div class="screen">
@@ -321,14 +305,17 @@
 				<img name="wifi" id="wifi" class="wifi" src="images/wifi-0.png">
 				<div name="cancellabel" class="cancellabel" id="cancellabel" onClick="cancel();">Cancel</div>
 				<div name="pause" class="pause" id="pause" onClick="pause();">Pause</div>
-				<div name="filename" id="filename" class="filename"><script>document.write(jobname);</script></div>
 				
-				<div name="completion" id="completion" class="completion">Completion:<br><span id ="varcompletion" style="align-items: flex-end">Calculating...</span></div>
-				<div name="timeelapsed" id="timeelapsed" class="timeelapsed">Time Elapsed:<br><span id ="vartimeelapsed" style="align-items: flex-end">Calculating...</span></div>
-				<div name="timeremaining" id="timeremaining" class="timeremaining">Time Remaining:<br><span id ="vartimeremaining" style="align-items: flex-end">Calculating...</span></div>
+				<div name="info" id="info" class="info">
+					<div name="filename" id="filename" class="filename"><script>document.write(jobname);</script></div>
+					<div name="completion" id="completion" class="completion">Completion:<br><span id ="varcompletion" style="align-items: flex-end">Calculating...</span></div>
+					<div name="timeelapsed" id="timeelapsed" class="timeelapsed">Time Elapsed:<br><span id ="vartimeelapsed" style="align-items: flex-end">Calculating...</span></div>
+					<div name="timeremaining" id="timeremaining" class="timeremaining">Time Remaining:<br><span id ="vartimeremaining" style="align-items: flex-end">Calculating...</span></div>
+					<div name="totaltime" id="totaltime" class="totaltime">Total Time:<br><span id ="totaltimes" style="align-items: flex-end">Calculating...</span></div>
+				</div>
+				
 				<div name="jobid" id="jobid" class="jobid"><script>document.write(printid);</script></div>
-				<div name="totaltime" id="totaltime" class="totaltime">Total Time:<br><span id ="totaltimes" style="align-items: flex-end">Calculating...</span></div>
-				
+								
 				<img name="homehighlight" id="homehighlight" class="homehighlight" src="images/homehighlightANIM.png" onClick="location.href='index.html';">
 				<img name="bigbuttonhighlight" id="bigbuttonhighlight" class="bigbuttonhighlight" src="images/bigbuttonANIM.png" onClick="cancel();">
 				
