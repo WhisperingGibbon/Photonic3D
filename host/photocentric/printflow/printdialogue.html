@@ -245,7 +245,7 @@
 						else{
 							// double check sliceHeight. If it's a crazy value, do not do the thing with raising the bed. We don't want a Z collision.
 							if (sliceHeight <= 0.2) {
-								var zMoveDist = maxHeight - (sliceHeight*totalslices);
+								var zMoveDist = maxHeight - (sliceHeight*totalslices) -20 ;// magic number of 20mm for safety's sake. 
 								if (zMoveDist > 0){
 									$.getJSON('../services/printers/moveZ/'+printerName+'/'+zMoveDist);
 								}
@@ -257,7 +257,7 @@
 					if ((parseFloat((currentslice/totalslices)*100).toFixed(2) != "NaN")&&(parseFloat((currentslice/totalslices)*100).toFixed(2) != "Infinity")){
 						document.getElementById("varcompletion").innerHTML = "Layer "+currentslice+" of "+totalslices+" ("+parseFloat((currentslice/totalslices)*100).toFixed(2)+"%)";
 					}
-				}, 5000);
+				}, 2500);
 			}
 			
 			
@@ -302,10 +302,10 @@
 				
 				<div name="info" id="info" class="info">
 					<div name="filename" id="filename" class="filename"><script>document.write(runningJobName);</script></div>
-					<div name="completion" id="completion" class="completion">Completion:<br><span id ="varcompletion" style="align-items: flex-end">Calculating...</span></div>
-					<div name="timeelapsed" id="timeelapsed" class="timeelapsed">Time Elapsed:<br><span id ="vartimeelapsed" style="align-items: flex-end">Calculating...</span></div>
-					<div name="timeremaining" id="timeremaining" class="timeremaining">Time Remaining:<br><span id ="vartimeremaining" style="align-items: flex-end">Calculating...</span></div>
-					<div name="totaltime" id="totaltime" class="totaltime">Total Time:<br><span id ="totaltimes" style="align-items: flex-end">Calculating...</span></div>
+					<div name="completion" id="completion" class="completion">Completion:<br><span id ="varcompletion" style="align-items: flex-end"><i>Calculating...</i></span></div>
+					<div name="timeelapsed" id="timeelapsed" class="timeelapsed">Time Elapsed:<br><span id ="vartimeelapsed" style="align-items: flex-end"><i>Calculating...</i></span></div>
+					<div name="timeremaining" id="timeremaining" class="timeremaining">Time Remaining:<br><span id ="vartimeremaining" style="align-items: flex-end"><i>Calculating...</i></span></div>
+					<div name="totaltime" id="totaltime" class="totaltime">Total Time:<br><span id ="totaltimes" style="align-items: flex-end"><i>Calculating...</i></span></div>
 				</div>
 				
 				<div name="jobid" id="jobid" class="jobid"><script>document.write(printid);</script></div>
