@@ -49,7 +49,15 @@
 						softwareRevision=data;
 						document.getElementById("swrev").innerHTML="Current Printer Software:<br/>"+String(softwareRevision);
 					});
+			if (typeof printerHardwareRev === 'undefined') {
+				printerHardwareRev = "Version 1";
+				// assume it's version 1 unless set otherwise
+			}
 			document.getElementById("hwrev").innerHTML="Hardware Revision:<br />"+String(printerHardwareRev);
+			if (typeof printerSerialNo === 'undefined') {
+				printerSerialNo = "unset";
+				// state it's unset unless it's set.
+			}
 			document.getElementById("serialno").innerHTML="Serial Number:<br />"+String(printerSerialNo);
 		</script>
         <div class="screen">
