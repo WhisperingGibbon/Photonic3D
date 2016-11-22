@@ -239,6 +239,7 @@
 							document.getElementById("progress").style = "width:"+parseInt((currentslice/totalslices)*100)+"%";
 						}
 						else{
+							window.location.href=("error.html?type=success&errorname=Print Complete!&errordetails=The print of <b>"+runningjobName+"</b> [Job ID: "+jobId+"] has completed, taking "+moment.duration(endtime-starttime).humanize()+" altogether.&errordetails2=Please remove the print from the platform and store any uncured resin for your next print.");
 						}
 					}
 	
