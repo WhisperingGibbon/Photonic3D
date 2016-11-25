@@ -35,13 +35,13 @@
 		}
 		
 		var loadPrinter = function loadPrinter() {
-			$http.get("/services/printers/get/" + printerName).success(
+			$http.get("services/printers/get/" + printerName).success(
 	        		function (data) {
 	        			refreshPrinter(data);
 	        		})
 		}
 		var loadPrintJob = function loadPrintJob() {
-			$http.get("/services/printJobs/getByPrinterName/" + printerName).success(
+			$http.get("services/printJobs/getByPrinterName/" + printerName).success(
         		function (data) {
         			controller.currentPrintJob = data;
         		})
