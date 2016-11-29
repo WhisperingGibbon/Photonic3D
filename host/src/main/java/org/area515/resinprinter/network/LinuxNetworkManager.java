@@ -31,7 +31,7 @@ public class LinuxNetworkManager implements NetworkManager {
 		// ditch some unnecessary results. Very custom code for Photocentric printers.
 		String wlan0 = null;
 		boolean wlan1found = false;
-		for (String mac: macResults{
+		for (String mac: macResults){
 			// this switch can just be MACs.add(mac) for non-Photocentric printers.
 			switch (mac.split("\\s")[0]){
 				case "lo":
@@ -58,14 +58,14 @@ public class LinuxNetworkManager implements NetworkManager {
 		// ditch some unnecessary results. Very custom code for Photocentric printers.
 		String wlan0 = null;
 		boolean wlan1found = false;
-		for (String ip: ipResults{
+		for (String ip: ipResults){
 			// this switch can just be IPs.add(ip) for non-Photocentric printers.
 			switch (ip.split("\\s")[0]){
 				case "lo":
 					//do nothing with loopback
 					break;
 				case "wlan0":
-					wlan0 = mac;
+					wlan0 = ip;
 					break;
 				case "wlan1":
 					wlan1found=true;
