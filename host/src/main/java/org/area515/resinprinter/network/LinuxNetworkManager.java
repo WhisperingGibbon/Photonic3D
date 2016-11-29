@@ -235,7 +235,7 @@ public class LinuxNetworkManager implements NetworkManager {
 		// do the new /etc/hosts hostname first.
 		String[] macResults = IOUtilities.executeNativeCommand(new String[]{"bash", "-c", "\"sed -i \"s/${hostname}/"+newHostname+"/g\" /etc/hosts\""}, null, (String) null);
 		// then the easier one - /etc/hostname
-		String[] macResults = IOUtilities.executeNativeCommand(new String[]{"bash", "-c", "\"echo \\\""+newHostname+"\\\" > /etc/hostname\""}, null, (String) null);
+		macResults = IOUtilities.executeNativeCommand(new String[]{"bash", "-c", "\"echo \\\""+newHostname+"\\\" > /etc/hostname\""}, null, (String) null);
 		// how to handle restarts...? Perhaps hand that off to the user.
 	}
 }
